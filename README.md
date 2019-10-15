@@ -37,7 +37,7 @@ Design Details
 ==============
 This is developed as an simple java application, to handle or manage the orders as needed. Considered using traditional design patterns like Singleton while development.
 
-Packages
+>Packages
 - config => This will define all the final static variable which can be used by the application
 - controller => This include class(es) to handle the request when hosted as API
 - endpoint => This has the class(es) which has the basic operations endpoints for each request
@@ -49,7 +49,7 @@ Packages
 
 Running the Application
 =======================
-Pre-requisites
+>Pre-requisites
 - Java, Maven is installed and validated.
 
 1. Clone the repository provided
@@ -57,7 +57,7 @@ Pre-requisites
          - **mvn clean package**
 3. Go into target directory and check for packaged .jar file (e.g.; dds-rest-api-0.0.1.jar)
 
-Execute:
+>Execute:
 java -jar (jar file to execute) (absolute path)
 
 * Jar file: target/dds-rest-api-0.0.1.jar
