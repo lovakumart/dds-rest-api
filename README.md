@@ -15,12 +15,12 @@ Assumptions
 - If the estimated delivery time is beyond Drone Daily Closing Time i.e.; 10:00:00pm, they will be scheduled for later.
 - If there is an input file then there are orders, if no orders there will not be any file.
 
-Enhance/TODO
+>Enhance/TODO
 - Make this service available as Rest API.
 - Add Email Utility to send notifications on the Order Status to Customer and Walmart.
 - Batch process to determine the Undelivered orders and add to the next day list.
 
-Unknowns:
+>Unknowns:
 - What is the time taken for loading the Drone with next Order? We need to add this to the Delivery Start Time.
 - Will the orders which are not delivered should be handled first before the next order file on next day?
 - What to do in case of multiple orders from the same customer around same time?
@@ -54,7 +54,7 @@ Pre-requisites
 
 1. Clone the repository provided
 2. Using any CLI (CMD or GIT BASH) go to application root directory and run below command
-         mvn clean package
+         - **mvn clean package**
 3. Go into target directory and check for packaged .jar file (e.g.; dds-rest-api-0.0.1.jar)
 
 Execute:
