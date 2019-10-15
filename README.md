@@ -58,7 +58,8 @@ Running the Application
 3. Go into target directory and check for packaged .jar file (e.g.; dds-rest-api-0.0.1.jar)
 
 >Execute:
-java -jar (jar file to execute) (absolute path)
+Run below command from CLI
+- java -jar (jar file to execute) (absolute path)
 
 * Jar file: target/dds-rest-api-0.0.1.jar
 * Absolute Path: D:/Walmart-DDS/data/inputData.txt
