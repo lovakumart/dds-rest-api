@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DdsAppConfig.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">dds-api</a> &gt; <a href="index.source.html" class="el_package">com.org.walmart.dds.config</a> &gt; <span class="el_source">DdsAppConfig.java</span></div><h1>DdsAppConfig.java</h1><pre class="source lang-java linenums">package com.org.walmart.dds.config;
+
+
+<span class="nc" id="L4">public class DdsAppConfig {</span>
+
+	/** Application Related Config **/
+	public static final String DAILY_DELIVERY_START_TIME = &quot;06:00:00&quot;;
+    public static final String DAILY_DELIVERY_END_TIME = &quot;22:00:00&quot;;
+    public static final String INPUT_TXT_FILE_PATH = &quot;D:/Walmart-DDS/data/inputData.txt&quot;;
+    public static final String OUTPUT_TXT_FILE_PATH = &quot;D:/Walmart-DDS/data/outputData.txt&quot;;
+    public static final String ADD_ORDER_SUCCESS_MSG = &quot;Order Successful&quot;;
+    public static final String DEL_ORDER_SUCCESS_MSG = &quot;Delete Order Successful&quot;;
+    public static final String ORDER_ALREADY_EXIST = &quot;Order Already Exists&quot;;
+    public static final String ORDER_NOT_EXIST = &quot;Order Doesn't Exists&quot;;
+    //TODO: Enhance this service to handle Json Type (Rest API)
+    //public static final String INPUT_JSON_FILE_PATH = &quot;D:/Walmart-DDS/data/inputData.json&quot;;
+    //public static final String OUTPUT_JSON_FILE_PATH = &quot;D:/Walmart-DDS/data/outputData.json&quot;;
+    
+    //TODO: Need to move to test related CONFIG file
+    /** Test Related Config **/
+    public static final String INPUT_VALID_TXT_FILE_PATH = &quot;D:/Walmart-DDS/data/inputData.txt&quot;;
+	public static final String INPUT_INVALID_TXT_FILE_PATH = &quot;D:/Walmart-DDS/data/inputData1.txt&quot;;
+	public static final String INPUT_EMPTY_FILE_PATH = &quot;&quot;;
+	public static final String INPUT_WRONG_FILE_TYPE = &quot;D:/Walmart-DDS/data/inputData.doc&quot;;
+	public static final String TEST_OUTPUT_FILE_PATH = &quot;D:/Walmart-DDS/data/junitTestOutput.txt&quot;;
+	public static final String TEST_INPUT_FILE_PATH = &quot;D:/Walmart-DDS/data/junitTestInput.txt&quot;;
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

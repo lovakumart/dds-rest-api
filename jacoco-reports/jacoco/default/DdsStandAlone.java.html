@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DdsStandAlone.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">dds-api</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">DdsStandAlone.java</span></div><h1>DdsStandAlone.java</h1><pre class="source lang-java linenums">import java.util.List;
+import com.org.walmart.dds.config.DdsAppConfig;
+import com.org.walmart.dds.exception.DdsAppException;
+import com.org.walmart.dds.model.OrderDetail;
+import com.org.walmart.dds.service.DdsService;
+import com.org.walmart.dds.util.DdsUtil;
+
+<span class="nc" id="L8">public class DdsStandAlone {</span>
+
+	
+	public static void main(String[] args) {
+<span class="nc" id="L12">		String inputFileName = null;</span>
+<span class="nc" id="L13">		String outputFileName = null;</span>
+<span class="nc" id="L14">		List&lt;OrderDetail&gt; orderDetailList = null;</span>
+<span class="nc" id="L15">		List&lt;String&gt; inputDataList = null;</span>
+
+		/**
+		 * Note: If the File Path is not sent as argument, it will pick the
+		 * default filepath/filename from Config i.e.; &quot;D:/Walmart-DDS/data/inputData.txt&quot;
+		 * 
+		 * Sample Input: 
+		 * WM001 N11W5 05:11:50 
+		 * WM002 S3E2 05:11:55
+		 */
+<span class="nc bnc" id="L25" title="All 2 branches missed.">		if (args.length != 0) {</span>
+<span class="nc" id="L26">			inputFileName = args[0];</span>
+<span class="nc" id="L27">		} else {</span>
+<span class="nc" id="L28">			System.out.println(&quot;The input file path is not provided. Getting default from CONFIG file.&quot;);</span>
+<span class="nc" id="L29">			inputFileName = DdsAppConfig.INPUT_TXT_FILE_PATH;</span>
+		}
+
+		try {
+			/** If File Exists and it is of Type .txt, then continue. If not, throw Exception **/
+<span class="nc bnc" id="L34" title="All 2 branches missed.">			if (DdsUtil.isInputFileValid(inputFileName)) {</span>
+				
+				/** Creating List of Input Data reading from the input File **/
+<span class="nc" id="L37">				inputDataList = DdsService.createInputDataFromFile(inputFileName);</span>
+
+				/** Creating Order Details List from the Input Data **/
+<span class="nc" id="L40">				orderDetailList = DdsService.createOrderDetails(inputDataList);</span>
+				
+				/** Sorting the orders based on the Delivery Distance **/
+<span class="nc" id="L43">				orderDetailList = DdsService.sortOrderByDeliveryDistance(orderDetailList);</span>
+
+				/** Creating Delivery Schedule Based On below assumptions */
+<span class="nc" id="L46">				orderDetailList = DdsService.createDeliverySchedule(orderDetailList);</span>
+
+				/** Calculate the Net Promoter Score Percentile */
+<span class="nc" id="L49">				Integer npsValue = DdsUtil.calcNPSValue(orderDetailList);</span>
+
+				/**
+				 * Assumption: If the File Path is not sent as argument, it will pick the
+				 * default path from Config &quot;D:/Walmart-DDS/data/outputData.txt&quot;
+				 */
+<span class="nc bnc" id="L55" title="All 2 branches missed.">				if (args.length &gt; 1) {</span>
+<span class="nc" id="L56">					outputFileName = args[1];</span>
+<span class="nc" id="L57">				} else {</span>
+<span class="nc" id="L58">					System.out.println(&quot;The output file path is not provided. Getting default from CONFIG file.&quot;);</span>
+<span class="nc" id="L59">					outputFileName = DdsAppConfig.OUTPUT_TXT_FILE_PATH;</span>
+				}
+
+				/**
+				 * Write the Output (Order and Departure Time, along with NPS Value to a file)
+				 * 
+				 * Sample Output: 
+				 * WM002 06:00:00 
+				 * WM001 06:07:13 
+				 * NPS 87
+				 */
+<span class="nc" id="L70">				DdsService.writeOutputToFile(outputFileName, orderDetailList, npsValue);</span>
+			}
+<span class="nc" id="L72">		} catch (DdsAppException ex) {</span>
+<span class="nc" id="L73">			System.out.println(ex.getDdsErrorTypeEnum().getName() + &quot; # &quot; + ex.getDdsErrorTypeEnum().getErrorId() + &quot; # &quot;</span>
+<span class="nc" id="L74">					+ ex.getDdsErrorTypeEnum().getErrorTxt());</span>
+		}
+<span class="nc" id="L76">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

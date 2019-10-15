@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DdsService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">dds-api</a> &gt; <a href="index.source.html" class="el_package">com.org.walmart.dds.service</a> &gt; <span class="el_source">DdsService.java</span></div><h1>DdsService.java</h1><pre class="source lang-java linenums">package com.org.walmart.dds.service;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.org.walmart.dds.config.DdsAppConfig;
+import com.org.walmart.dds.exception.DdsAppException;
+import com.org.walmart.dds.exception.DdsErrorType;
+import com.org.walmart.dds.factory.DdsDataTransformFactory;
+import com.org.walmart.dds.model.OrderDetail;
+import com.org.walmart.dds.util.DdsUtil;
+
+<span class="fc" id="L26">public class DdsService {</span>
+
+<span class="fc" id="L28">	static final Logger _logger = LoggerFactory.getLogger(DdsService.class);</span>
+
+	/**
+	 * This method is to extract and create list of String (input) reading from
+	 * File.
+	 * 
+	 * @param fileName
+	 * @return List&lt;String&gt;
+	 * @throws DdsAppException
+	 */
+	public static List&lt;String&gt; createInputDataFromFile(String fileName) throws DdsAppException {
+<span class="fc" id="L39">		_logger.info(&quot;Reading the input data from the File : &quot; + fileName);</span>
+<span class="fc" id="L40">		BufferedReader lineReader = null;</span>
+<span class="fc" id="L41">		List&lt;String&gt; inputDataList = null;</span>
+		try {
+			/** Read file line by line and add the value to the List of String **/
+<span class="fc" id="L44">			lineReader = new BufferedReader(new FileReader(fileName));</span>
+<span class="fc" id="L45">			inputDataList = new ArrayList&lt;String&gt;();</span>
+			String inputStr;
+
+<span class="fc bfc" id="L48" title="All 2 branches covered.">			while ((inputStr = lineReader.readLine()) != null) {</span>
+<span class="fc" id="L49">				inputDataList.add(inputStr);</span>
+			}
+
+<span class="fc" id="L52">			lineReader.close();</span>
+<span class="fc" id="L53">		} catch (Exception ex) {</span>
+<span class="pc bpc" id="L54" title="3 of 4 branches missed.">			if(ex instanceof IOException || ex instanceof FileNotFoundException) {</span>
+<span class="fc" id="L55">				throw new DdsAppException(DdsErrorType.DDS_007, &quot;Caught Exception : &quot; + DdsErrorType.DDS_007.getErrorTxt());</span>
+			}
+<span class="fc" id="L57">		}</span>
+
+<span class="fc" id="L59">		return inputDataList;</span>
+	}
+
+	/**
+	 * This method is to create list of OrderDetails using the List of input data
+	 * read from file.
+	 * Generating Random DroneID with Alpha Numeric. 
+	 * Assumption: Each file or Set of Orders will be assigned to one Drone
+	 * 
+	 * @param inputDataList
+	 * @return List&lt;OrderDetail&gt;
+	 * @throws DdsAppException
+	 */
+	public static List&lt;OrderDetail&gt; createOrderDetails(List&lt;String&gt; inputDataList) throws DdsAppException {
+		
+<span class="fc" id="L74">		final String droneId = &quot;DRN#&quot;+RandomStringUtils.random(6, false, true);</span>
+<span class="fc" id="L75">		_logger.info(&quot;Creating order details and assigning to Drone : &quot;+droneId);</span>
+		
+<span class="fc" id="L77">		List&lt;OrderDetail&gt; orderDetailList = new ArrayList&lt;OrderDetail&gt;();</span>
+		try {
+<span class="fc bfc" id="L79" title="All 2 branches covered.">			for (String inputStr : inputDataList) {</span>
+				/** Check if the input data is valid **/
+<span class="pc bpc" id="L81" title="1 of 2 branches missed.">				if (DdsUtil.isValidInput(inputStr)) {</span>
+					/** Create the OrderDetail object from individual input data string **/
+<span class="fc" id="L83">					OrderDetail newOrder = DdsDataTransformFactory.createOrderDetailFromString(inputStr);</span>
+<span class="fc" id="L84">					newOrder.setDroneId(droneId);</span>
+
+					/** Calculate the Distance from Warehouse to Delivery Address **/
+<span class="fc" id="L87">					DdsUtil.calcDestDistance(newOrder);</span>
+
+					/** TODO: Required for Rest API invocation **/
+					/** Add the order to the Map **/
+					// DdsEndPoint.getInstance().addOrderDetail(newOrder);
+
+					/** Add the order to the List **/
+<span class="fc" id="L94">					orderDetailList.add(newOrder);</span>
+<span class="fc" id="L95">				} else {</span>
+<span class="nc" id="L96">					throw new DdsAppException(DdsErrorType.DDS_002,</span>
+<span class="nc" id="L97">							&quot;Caught Exception : &quot; + DdsErrorType.DDS_002.getErrorTxt());</span>
+				}
+<span class="fc" id="L99">			}</span>
+
+<span class="nc" id="L101">		} catch (Exception ex) {</span>
+<span class="nc" id="L102">			_logger.debug(ExceptionUtils.getStackTrace(ex));</span>
+<span class="nc" id="L103">			throw new DdsAppException(DdsErrorType.DDS_002, &quot;Caught Exception : &quot; + DdsErrorType.DDS_002.getErrorTxt());</span>
+
+<span class="fc" id="L105">		}</span>
+
+<span class="fc" id="L107">		return orderDetailList;</span>
+	}
+
+	/**
+	 * This method is the sort the list of orders based on the delivery distance.
+	 * The logic below is using the Collections sort, in which the Compare method is
+	 * overridden to compare the orderdetail delivery distance and arrange them in
+	 * ascending order.
+	 * 
+	 * @param inputOrderList
+	 * @return List&lt;OrderDetail&gt; (Sorted in Ascending Order)
+	 * @throws DdsAppException
+	 */
+	public static List&lt;OrderDetail&gt; sortOrderByDeliveryDistance(List&lt;OrderDetail&gt; inputOrderList) throws DdsAppException {
+
+<span class="fc" id="L122">		_logger.info(&quot;Sorting the Order based on the Distance from Warehouse&quot;);</span>
+<span class="fc" id="L123">		Collections.sort(inputOrderList, new Comparator&lt;OrderDetail&gt;() {</span>
+			@Override
+			public int compare(OrderDetail order1, OrderDetail order2) {
+<span class="fc" id="L126">				return Double.compare(Double.valueOf(order1.getDeliveryDistance()),</span>
+<span class="fc" id="L127">						Double.valueOf(order2.getDeliveryDistance()));</span>
+			}
+		});
+
+<span class="fc" id="L131">		return inputOrderList;</span>
+	}
+
+	
+	/**
+	 * This method is to calculate the Start Time for each order in the sorted list
+	 * 
+	 * @param inputOrderList
+	 * @return List&lt;OrderDetail&gt; (Sorted in Ascending Order)
+	 * @throws DdsAppException
+	 */
+	public static List&lt;OrderDetail&gt; createDeliverySchedule(List&lt;OrderDetail&gt; inputOrderList) throws DdsAppException {
+
+		/**
+		 * Calculate the Delivery Start Time for each sorted Order based on the previous
+		 * Delivery
+		 **/
+<span class="fc" id="L148">		String scheduledStartTime = DdsAppConfig.DAILY_DELIVERY_START_TIME;</span>
+<span class="fc bfc" id="L149" title="All 2 branches covered.">		for (OrderDetail orderDetail : inputOrderList) {</span>
+
+<span class="fc" id="L151">			scheduledStartTime = DdsUtil.calcDeliveryStartTime(orderDetail, scheduledStartTime);</span>
+<span class="fc" id="L152">		}</span>
+<span class="fc" id="L153">		return inputOrderList;</span>
+	}
+
+	/**
+	 * This method is to loop through the list of OrderDetails and write to given
+	 * Output File
+	 * 
+	 * @param fileName
+	 * @param orderDetailList
+	 * @param npsValue
+	 * 
+	 * @throws DdsAppException
+	 */
+	public static void writeOutputToFile(String fileName, List&lt;OrderDetail&gt; orderDetailList, Integer npsValue)
+			throws DdsAppException {
+
+<span class="fc" id="L169">		BufferedWriter lineWriter = null;</span>
+		try {
+<span class="fc" id="L171">			lineWriter = new BufferedWriter(new FileWriter(fileName));</span>
+<span class="nc" id="L172">		} catch (IOException ex) {</span>
+<span class="nc" id="L173">			_logger.debug(ExceptionUtils.getStackTrace(ex));</span>
+<span class="nc" id="L174">			throw new DdsAppException(DdsErrorType.DDS_001, DdsErrorType.DDS_001.getErrorTxt());</span>
+<span class="fc" id="L175">		}</span>
+
+<span class="fc" id="L177">		_logger.info(&quot;Writing the output of the schedule to File : &quot; + fileName);</span>
+		/** Reading each line and write to File **/
+		try {
+<span class="fc bfc" id="L180" title="All 2 branches covered.">			for (OrderDetail order : orderDetailList) {</span>
+<span class="fc" id="L181">				lineWriter.write(order.getOrderId() + &quot; &quot; + order.getActDeliveryStartTime());</span>
+<span class="fc" id="L182">				lineWriter.newLine();</span>
+<span class="fc" id="L183">			}</span>
+
+			/** Add NPS value in the end of the file (as per the required output) **/
+<span class="fc" id="L186">			lineWriter.write(&quot;NPS &quot; + npsValue);</span>
+
+<span class="fc" id="L188">			lineWriter.close();</span>
+<span class="nc" id="L189">		} catch (IOException ex) {</span>
+<span class="nc" id="L190">			_logger.debug(ExceptionUtils.getStackTrace(ex));</span>
+<span class="nc" id="L191">			throw new DdsAppException(DdsErrorType.DDS_003, DdsErrorType.DDS_003.getErrorTxt());</span>
+<span class="fc" id="L192">		}</span>
+<span class="fc" id="L193">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

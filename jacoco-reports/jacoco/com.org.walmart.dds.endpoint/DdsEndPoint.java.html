@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DdsEndPoint.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">dds-api</a> &gt; <a href="index.source.html" class="el_package">com.org.walmart.dds.endpoint</a> &gt; <span class="el_source">DdsEndPoint.java</span></div><h1>DdsEndPoint.java</h1><pre class="source lang-java linenums">package com.org.walmart.dds.endpoint;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.org.walmart.dds.config.DdsAppConfig;
+import com.org.walmart.dds.model.OrderDetail;
+
+public class DdsEndPoint {
+
+	private Map&lt;String, OrderDetail&gt; orderDetailsMap;
+	private Map&lt;String, OrderDetail&gt; deliveredDetailsMap;
+	
+<span class="fc" id="L17">	static final Logger _logger = LoggerFactory.getLogger(DdsEndPoint.class);</span>
+
+	// Singleton
+<span class="fc" id="L20">	private static DdsEndPoint ddsEndPoint = null;</span>
+
+	/** Constructor **/
+<span class="fc" id="L23">	private DdsEndPoint() {</span>
+<span class="fc" id="L24">		orderDetailsMap = new HashMap&lt;String, OrderDetail&gt;();</span>
+<span class="fc" id="L25">		deliveredDetailsMap = new HashMap&lt;String, OrderDetail&gt;();</span>
+<span class="fc" id="L26">	}</span>
+
+	/** 
+	 * Singleton Pattern invocation to handle the state of the OrderDetails.
+	 * This will actually help to have one common Map Object of OrderDetails.
+	 * This is helpful when we convert this java application into Rest Service.
+	 **/
+	public static DdsEndPoint getInstance() {
+<span class="fc bfc" id="L34" title="All 2 branches covered.">		if (ddsEndPoint == null) {</span>
+<span class="fc" id="L35">			_logger.info(&quot;New DDS Endpoint Instance Created.&quot;);</span>
+<span class="fc" id="L36">			ddsEndPoint = new DdsEndPoint();</span>
+<span class="fc" id="L37">			return ddsEndPoint;</span>
+		} else {
+<span class="fc" id="L39">			return ddsEndPoint;</span>
+		}
+	}
+
+	/**
+	 * This method is to get the Order Details for given OrderId from the common Map of OrderDetails
+	 * 
+	 * @param orderId
+	 * @return OrderDetail
+	 */
+	public OrderDetail getOrderDetail(String orderId) {
+<span class="fc" id="L50">		_logger.info(&quot;Getting details for the Order ID : &quot; + orderId);</span>
+<span class="fc" id="L51">		return orderDetailsMap.get(orderId);</span>
+	}
+
+	/**
+	 * This method is to get the Map of all Order Details
+	 * 
+	 * @return Map of OrderDetails
+	 */
+	public Map&lt;String, OrderDetail&gt; getOrderDetails() {
+<span class="fc" id="L60">		_logger.info(&quot;Getting details of All Orders&quot;);</span>
+<span class="fc" id="L61">		return orderDetailsMap;</span>
+	}
+
+	/**
+	 * This method is to add given OrderDetail to the Map, with OrderId as Key
+	 * 
+	 * @param order
+	 * @return String(Success/Fail/Already Exists)
+	 */
+	public String addOrderDetail(OrderDetail order) {
+<span class="fc bfc" id="L71" title="All 2 branches covered.">		if (orderDetailsMap.get(order.getOrderId()) == null) {</span>
+<span class="fc" id="L72">			_logger.info(&quot;Adding new Order Details : &quot; + order.getOrderId());</span>
+<span class="fc" id="L73">			orderDetailsMap.put(order.getOrderId(), order);</span>
+		} else {
+<span class="fc" id="L75">			_logger.info(&quot;Order Already Exist :  &quot; + order.getOrderId());</span>
+<span class="fc" id="L76">			return DdsAppConfig.ORDER_ALREADY_EXIST;</span>
+		}
+<span class="fc" id="L78">		return DdsAppConfig.ADD_ORDER_SUCCESS_MSG;</span>
+	}
+
+	/**
+	 * This method is to delete given OrderDetail from the Map, with OrderId as Key
+	 * 
+	 * @param order
+	 * @return String(Success/Fail/Already Exists)
+	 */
+	public String deleteOrderDetail(OrderDetail order) {
+<span class="fc bfc" id="L88" title="All 2 branches covered.">		if (orderDetailsMap.get(order.getOrderId()) != null) {</span>
+<span class="fc" id="L89">			_logger.info(&quot;Delete Existing Order Details : &quot; + order.getOrderId());</span>
+<span class="fc" id="L90">			orderDetailsMap.remove(order.getOrderId());</span>
+<span class="fc" id="L91">			deliveredDetailsMap.put(order.getOrderId(), order);</span>
+		} else {
+<span class="fc" id="L93">			_logger.info(&quot;Order Doesnot Exist!&quot;);</span>
+<span class="fc" id="L94">			return DdsAppConfig.ORDER_NOT_EXIST;</span>
+		}
+<span class="fc" id="L96">		return DdsAppConfig.DEL_ORDER_SUCCESS_MSG;</span>
+
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

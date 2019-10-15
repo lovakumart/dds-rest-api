@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>OrderDetail.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">dds-api</a> &gt; <a href="index.source.html" class="el_package">com.org.walmart.dds.model</a> &gt; <span class="el_source">OrderDetail.java</span></div><h1>OrderDetail.java</h1><pre class="source lang-java linenums">package com.org.walmart.dds.model;
+
+<span class="fc" id="L3">public class OrderDetail {</span>
+
+	/** Pojo/Model of the object/attributes which will be maintained **/
+	
+	private String droneId;
+	private String orderId;
+	private String orderDate;
+	private String orderTime;
+	private String gridCoordinate;
+	private String deliveryDistance;
+	private String actDeliveryStartDate;
+	private String actDeliveryStartTime;
+	private String actDeliveryEndDate;
+	private String actDeliveryEndTime;
+	private String finalRoundTripDate;
+	private String finalRoundTripTime;
+	private String deliveryTimeTaken;
+	private String status;
+	private String comments;
+
+	public String getDroneId() {
+<span class="nc" id="L24">		return droneId;</span>
+	}
+
+	public void setDroneId(String droneId) {
+<span class="fc" id="L28">		this.droneId = droneId;</span>
+<span class="fc" id="L29">	}</span>
+
+	public String getOrderId() {
+<span class="fc" id="L32">		return orderId;</span>
+	}
+
+	public void setOrderId(String orderId) {
+<span class="fc" id="L36">		this.orderId = orderId;</span>
+<span class="fc" id="L37">	}</span>
+
+	public String getOrderDate() {
+<span class="fc" id="L40">		return orderDate;</span>
+	}
+
+	public void setOrderDate(String orderDate) {
+<span class="fc" id="L44">		this.orderDate = orderDate;</span>
+<span class="fc" id="L45">	}</span>
+
+	public String getOrderTime() {
+<span class="fc" id="L48">		return orderTime;</span>
+	}
+
+	public void setOrderTime(String orderTime) {
+<span class="fc" id="L52">		this.orderTime = orderTime;</span>
+<span class="fc" id="L53">	}</span>
+
+	public String getGridCoordinate() {
+<span class="fc" id="L56">		return gridCoordinate;</span>
+	}
+
+	public void setGridCoordinate(String gridCoordinate) {
+<span class="fc" id="L60">		this.gridCoordinate = gridCoordinate;</span>
+<span class="fc" id="L61">	}</span>
+
+	public String getDeliveryDistance() {
+<span class="fc" id="L64">		return deliveryDistance;</span>
+	}
+
+	public void setDeliveryDistance(String deliveryDistance) {
+<span class="fc" id="L68">		this.deliveryDistance = deliveryDistance;</span>
+<span class="fc" id="L69">	}</span>
+
+	public String getActDeliveryStartDate() {
+<span class="nc" id="L72">		return actDeliveryStartDate;</span>
+	}
+
+	public void setActDeliveryStartDate(String actDeliveryStartDate) {
+<span class="fc" id="L76">		this.actDeliveryStartDate = actDeliveryStartDate;</span>
+<span class="fc" id="L77">	}</span>
+
+	public String getActDeliveryStartTime() {
+<span class="fc" id="L80">		return actDeliveryStartTime;</span>
+	}
+
+	public void setActDeliveryStartTime(String actDeliveryStartTime) {
+<span class="fc" id="L84">		this.actDeliveryStartTime = actDeliveryStartTime;</span>
+<span class="fc" id="L85">	}</span>
+
+	public String getActDeliveryEndDate() {
+<span class="nc" id="L88">		return actDeliveryEndDate;</span>
+	}
+
+	public void setActDeliveryEndDate(String actDeliveryEndDate) {
+<span class="fc" id="L92">		this.actDeliveryEndDate = actDeliveryEndDate;</span>
+<span class="fc" id="L93">	}</span>
+
+	public String getActDeliveryEndTime() {
+<span class="fc" id="L96">		return actDeliveryEndTime;</span>
+	}
+
+	public void setActDeliveryEndTime(String actDeliveryEndTime) {
+<span class="fc" id="L100">		this.actDeliveryEndTime = actDeliveryEndTime;</span>
+<span class="fc" id="L101">	}</span>
+
+	public String getFinalRoundTripDate() {
+<span class="nc" id="L104">		return finalRoundTripDate;</span>
+	}
+
+	public void setFinalRoundTripDate(String finalRoundTripDate) {
+<span class="fc" id="L108">		this.finalRoundTripDate = finalRoundTripDate;</span>
+<span class="fc" id="L109">	}</span>
+
+	public String getFinalRoundTripTime() {
+<span class="fc" id="L112">		return finalRoundTripTime;</span>
+	}
+
+	public void setFinalRoundTripTime(String finalRoundTripTime) {
+<span class="fc" id="L116">		this.finalRoundTripTime = finalRoundTripTime;</span>
+<span class="fc" id="L117">	}</span>
+
+	public String getDeliveryTimeTaken() {
+<span class="fc" id="L120">		return deliveryTimeTaken;</span>
+	}
+
+	public void setDeliveryTimeTaken(String deliveryTimeTaken) {
+<span class="fc" id="L124">		this.deliveryTimeTaken = deliveryTimeTaken;</span>
+<span class="fc" id="L125">	}</span>
+
+	public String getStatus() {
+<span class="nc" id="L128">		return status;</span>
+	}
+
+	public void setStatus(String status) {
+<span class="nc" id="L132">		this.status = status;</span>
+<span class="nc" id="L133">	}</span>
+
+	public String getComments() {
+<span class="nc" id="L136">		return comments;</span>
+	}
+
+	public void setComments(String comments) {
+<span class="fc" id="L140">		this.comments = comments;</span>
+<span class="fc" id="L141">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
