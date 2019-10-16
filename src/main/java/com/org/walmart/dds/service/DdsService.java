@@ -17,10 +17,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.org.walmart.dds.config.DdsAppConfig;
+import com.org.walmart.dds.config.EmailUtilConfig;
 import com.org.walmart.dds.exception.DdsAppException;
 import com.org.walmart.dds.exception.DdsErrorType;
 import com.org.walmart.dds.factory.DdsDataTransformFactory;
 import com.org.walmart.dds.model.OrderDetail;
+import com.org.walmart.dds.util.DdsEmailUtil;
 import com.org.walmart.dds.util.DdsUtil;
 
 public class DdsService {
@@ -198,16 +200,26 @@ public class DdsService {
 		try {
 			for (OrderDetail order : orderDetailList) {
 				String outputStr = "";
+
 				if (order.isDelivered()) {
 					outputStr = order.getOrderId() + " " + order.getActDeliveryStartTime();
 					_logger.info("Saving the delivered Order record : " + outputStr);
 					deliveredLineWriter.write(outputStr);
+					if (DdsEmailUtil.sendEmail(EmailUtilConfig.CUST_EMAIL_ID, order)) {
+						_logger.info("Email sent to : " + EmailUtilConfig.CUST_EMAIL_ID + " for Order : "
+								+ order.getOrderId());
+					}
 					deliveredLineWriter.newLine();
 				} else {
 					outputStr = order.getOrderId() + " " + order.getGridCoordinate() + " " + order.getOrderTime();
 					_logger.info("Saving the Undelivered Order record : " + outputStr);
 					/** Undelivered Data should be same as input file i.e.; WM001 N12W5 05:00:00 **/
 					undeliveredLineWriter.write(outputStr);
+
+					if (DdsEmailUtil.sendEmail(EmailUtilConfig.CUST_EMAIL_ID, order)) {
+						_logger.info("Email sent to : " + EmailUtilConfig.CUST_EMAIL_ID + " for Order : "
+								+ order.getOrderId());
+					}
 					undeliveredLineWriter.newLine();
 				}
 			}
