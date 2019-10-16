@@ -46,7 +46,7 @@ public class DdsServiceTest {
 		orderDetail = orderList.get(0);
 		assertEquals("WM002 06:00:00", (orderDetail.getOrderId() + " " + orderDetail.getActDeliveryStartTime()));
 		orderDetail = orderList.get(1);
-		assertEquals("WM001 06:03:37", (orderDetail.getOrderId() + " " + orderDetail.getActDeliveryStartTime()));
+		assertEquals("WM001 06:07:13", (orderDetail.getOrderId() + " " + orderDetail.getActDeliveryStartTime()));
 
 	}
 
