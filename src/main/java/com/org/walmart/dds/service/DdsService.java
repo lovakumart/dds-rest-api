@@ -51,8 +51,9 @@ public class DdsService {
 
 			lineReader.close();
 		} catch (Exception ex) {
-			if(ex instanceof IOException || ex instanceof FileNotFoundException) {
-				throw new DdsAppException(DdsErrorType.DDS_007, "Caught Exception : " + DdsErrorType.DDS_007.getErrorTxt());
+			if (ex instanceof IOException || ex instanceof FileNotFoundException) {
+				throw new DdsAppException(DdsErrorType.DDS_007,
+						"Caught Exception : " + DdsErrorType.DDS_007.getErrorTxt());
 			}
 		}
 
@@ -61,19 +62,18 @@ public class DdsService {
 
 	/**
 	 * This method is to create list of OrderDetails using the List of input data
-	 * read from file.
-	 * Generating Random DroneID with Alpha Numeric. 
-	 * Assumption: Each file or Set of Orders will be assigned to one Drone
+	 * read from file. Generating Random DroneID with Alpha Numeric. Assumption:
+	 * Each file or Set of Orders will be assigned to one Drone
 	 * 
 	 * @param inputDataList
 	 * @return List<OrderDetail>
 	 * @throws DdsAppException
 	 */
 	public static List<OrderDetail> createOrderDetails(List<String> inputDataList) throws DdsAppException {
-		
-		final String droneId = "DRN#"+RandomStringUtils.random(6, false, true);
-		_logger.info("Creating order details and assigning to Drone : "+droneId);
-		
+
+		final String droneId = "DRN#" + RandomStringUtils.random(6, false, true);
+		_logger.info("Creating order details and assigning to Drone : " + droneId);
+
 		List<OrderDetail> orderDetailList = new ArrayList<OrderDetail>();
 		try {
 			for (String inputStr : inputDataList) {
@@ -117,7 +117,8 @@ public class DdsService {
 	 * @return List<OrderDetail> (Sorted in Ascending Order)
 	 * @throws DdsAppException
 	 */
-	public static List<OrderDetail> sortOrderByDeliveryDistance(List<OrderDetail> inputOrderList) throws DdsAppException {
+	public static List<OrderDetail> sortOrderByDeliveryDistance(List<OrderDetail> inputOrderList)
+			throws DdsAppException {
 
 		_logger.info("Sorting the Order based on the Distance from Warehouse");
 		Collections.sort(inputOrderList, new Comparator<OrderDetail>() {
@@ -131,9 +132,10 @@ public class DdsService {
 		return inputOrderList;
 	}
 
-	
 	/**
 	 * This method is to calculate the Start Time for each order in the sorted list
+	 * We will eliminate the Orders which will take past the Delivery End Time
+	 * 10:00:00PM
 	 * 
 	 * @param inputOrderList
 	 * @return List<OrderDetail> (Sorted in Ascending Order)
@@ -146,9 +148,25 @@ public class DdsService {
 		 * Delivery
 		 **/
 		String scheduledStartTime = DdsAppConfig.DAILY_DELIVERY_START_TIME;
+
 		for (OrderDetail orderDetail : inputOrderList) {
 
-			scheduledStartTime = DdsUtil.calcDeliveryStartTime(orderDetail, scheduledStartTime);
+			String orderDeliveryTime = DdsUtil.calcDeliveryTime(orderDetail.getOrderTime(),
+					Double.valueOf(orderDetail.getDeliveryDistance()));
+
+			/** Check if the next order Start Time is beyond the Daily Delivery End Time **/
+			Long diffDeliveryTimeToEndTime = DdsUtil.calcDeliveryTimeTaken(orderDeliveryTime,
+					DdsAppConfig.DAILY_DELIVERY_END_TIME);
+
+			if (diffDeliveryTimeToEndTime < 0) {
+				orderDetail
+						.setComments("Delivery Time is out of the normal business hours. Delivery for the Order Id : "
+								+ orderDetail.getOrderId() + " will be rescheduled");
+				_logger.error("Delivery Time is out of the normal business hours. Delivery for the Order Id : "
+						+ orderDetail.getOrderId() + " will be rescheduled");
+			} else {
+				scheduledStartTime = DdsUtil.calcDeliveryStartTime(orderDetail, scheduledStartTime);
+			}
 		}
 		return inputOrderList;
 	}
@@ -163,8 +181,8 @@ public class DdsService {
 	 * 
 	 * @throws DdsAppException
 	 */
-	public static void writeOutputToFile(String deliveredFile, String undeliveredFile, List<OrderDetail> orderDetailList, Integer npsValue)
-			throws DdsAppException {
+	public static void writeOutputToFile(String deliveredFile, String undeliveredFile,
+			List<OrderDetail> orderDetailList, Integer npsValue) throws DdsAppException {
 
 		BufferedWriter deliveredLineWriter = null;
 		BufferedWriter undeliveredLineWriter = null;
@@ -176,16 +194,20 @@ public class DdsService {
 			throw new DdsAppException(DdsErrorType.DDS_001, DdsErrorType.DDS_001.getErrorTxt());
 		}
 
-		_logger.info("Writing the output of the schedule to File : " + deliveredFile);
 		/** Reading each line and write to File **/
 		try {
 			for (OrderDetail order : orderDetailList) {
-				if(order.isDelivered()) {
-					deliveredLineWriter.write(order.getOrderId() + " " + order.getActDeliveryStartTime());
+				String outputStr = "";
+				if (order.isDelivered()) {
+					outputStr = order.getOrderId() + " " + order.getActDeliveryStartTime();
+					_logger.info("Saving the delivered Order record : " + outputStr);
+					deliveredLineWriter.write(outputStr);
 					deliveredLineWriter.newLine();
 				} else {
+					outputStr = order.getOrderId() + " " + order.getGridCoordinate() + " " + order.getOrderTime();
+					_logger.info("Saving the Undelivered Order record : " + outputStr);
 					/** Undelivered Data should be same as input file i.e.; WM001 N12W5 05:00:00 **/
-					undeliveredLineWriter.write(order.getOrderId() + " " + order.getGridCoordinate() + " " + order.getOrderTime());
+					undeliveredLineWriter.write(outputStr);
 					undeliveredLineWriter.newLine();
 				}
 			}
