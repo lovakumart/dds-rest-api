@@ -112,19 +112,6 @@ public class DdsUtil {
 	 */
 	public static String calcDeliveryStartTime(OrderDetail order, String scheduledStartTime) throws DdsAppException {
 
-		String scheduledEndTime = DdsAppConfig.DAILY_DELIVERY_END_TIME;
-		
-		/** Check if the next order Start Time is beyond the Daily Delivery End Time **/
-		Long checkDeliveryEndTime = calcDeliveryTimeTaken(scheduledStartTime, scheduledEndTime);
-
-		if (checkDeliveryEndTime < 0) {
-			order.setComments("Delivery Time is out of the normal business hours. Delivery for the Order Id : "
-					+ order.getOrderId() + " will be rescheduled");
-			_logger.error("Delivery Time is out of the normal business hours. Delivery for the Order Id : "
-					+ order.getOrderId() + " will be rescheduled");
-			return scheduledStartTime;
-		}	
-
 		Double distance = Double.valueOf(order.getDeliveryDistance());
 		order.setActDeliveryStartDate(order.getOrderDate());
 		order.setActDeliveryStartTime(scheduledStartTime);
@@ -142,13 +129,14 @@ public class DdsUtil {
 				String.valueOf(calcDeliveryTimeTaken(order.getOrderTime(), order.getFinalRoundTripTime())));
 
 		_logger.info("Delivery Start Time For Order : "+order.getOrderId()+" is " + scheduledStartTime);
-		_logger.info("Delivery End Time For Order : "+order.getOrderId()+" is " + scheduledStartTime);
+		_logger.info("Delivery End Time For Order : "+order.getOrderId()+" is " + order.getFinalRoundTripTime());
+		_logger.info("Drone Warehouse Returned After Order : "+order.getOrderId()+" is " + order.getFinalRoundTripTime());
 		
 		/**
 		 * Seting the Scheduled Start Time of next Delivery using the previous order
 		 * Delivery End Time
 		 **/
-		scheduledStartTime = order.getActDeliveryEndTime();
+		scheduledStartTime = order.getFinalRoundTripTime();
 
 		return scheduledStartTime;
 	}
@@ -240,7 +228,7 @@ public class DdsUtil {
 	 * @return Long (Time Taken)
 	 * @throws DdsAppException
 	 */
-	private static Long calcDeliveryTimeTaken(String orderTime, String deliveredTime) throws DdsAppException {
+	public static Long calcDeliveryTimeTaken(String orderTime, String deliveredTime) throws DdsAppException {
 		Long deliveryTimeTaken = 0L;
 		try {
 			SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
@@ -262,7 +250,7 @@ public class DdsUtil {
 	 * @param distance
 	 * @return Delivery Time (String)
 	 */
-	private static String calcDeliveryTime(String ordertime, Double distance) {
+	public static String calcDeliveryTime(String ordertime, Double distance) {
 		/** Converting the Distance into String and Splitting the Value and Decimal **/
 		String distanceVal = new DecimalFormat("#.00").format(distance);
 		String[] splitDistanceVal = distanceVal.split("\\.");
