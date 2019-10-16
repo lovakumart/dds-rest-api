@@ -109,7 +109,7 @@ public class DdsRestController {
 	 * @throws DdsAppException
 	 * @throws IOException
 	 */
-	@RequestMapping(method = RequestMethod.POST, value = "/order/processfile")
+	/*@RequestMapping(method = RequestMethod.POST, value = "/order/processfile")
 	public List<OrderDetail> fileUpload(@RequestParam MultipartFile file, RedirectAttributes redirectAttributes)
 			throws DdsAppException, IOException {
 
@@ -136,7 +136,7 @@ public class DdsRestController {
 				"You successfully uploaded '" + file.getOriginalFilename() + "'");
 
 		return orderList;
-	}
+	}*/
 	
 	/**
 	 * This method is to read the uploaded/requested file and give the response
@@ -147,7 +147,7 @@ public class DdsRestController {
 	 * @throws DdsAppException
 	 * @throws IOException
 	 */
-	@RequestMapping(method = RequestMethod.POST, value = "/order/readfile")
+	/*@RequestMapping(method = RequestMethod.POST, value = "/order/readfile")
 	public List<OrderDetail> readFromFile(@RequestParam MultipartFile file)	throws DdsAppException, IOException {
 
 		_logger.info("Received file : " + file);
@@ -164,6 +164,6 @@ public class DdsRestController {
 		DdsService.createOrderDetails(inputList);
 		
 		return orderList;
-	}
+	}*/
 
 }
