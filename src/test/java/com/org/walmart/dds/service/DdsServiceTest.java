@@ -31,18 +31,18 @@ public class DdsServiceTest {
 	public void testDdsServiceAllMethods() throws DdsAppException {
 
 		inputList = ddsService.createInputDataFromFile(DdsAppConfig.TEST_INPUT_FILE_PATH);
-		assertEquals(2, inputList.size());
+		assertEquals(3, inputList.size());
 		assertEquals("WM001 N11W5 05:11:50", inputList.get(0));
 
 		orderList = ddsService.createOrderDetails(inputList);
-		assertEquals(2, orderList.size());
+		assertEquals(3, orderList.size());
 		assertEquals("WM001", orderList.get(0).getOrderId());
 
 		orderList = ddsService.sortOrderByDeliveryDistance(orderList);
 		assertEquals("WM002", orderList.get(0).getOrderId());
 
 		orderList = ddsService.createDeliverySchedule(orderList);
-		assertEquals(2, orderList.size());
+		assertEquals(3, orderList.size());
 		orderDetail = orderList.get(0);
 		assertEquals("WM002 06:00:00", (orderDetail.getOrderId() + " " + orderDetail.getActDeliveryStartTime()));
 		orderDetail = orderList.get(1);
