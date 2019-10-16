@@ -93,7 +93,7 @@ public class DdsUtilTest {
 		orderDetail.setOrderTime("05:11:55");
 
 		ddsUtil.calcDeliveryStartTime(orderDetail, nextOrderStartTime);
-		assertEquals("06:03:37", orderDetail.getActDeliveryStartTime());
+		assertEquals("06:07:13", orderDetail.getActDeliveryStartTime());
 	}
 
 	// Test for delivery time outside the end of business i.e.; after 10:00PM
