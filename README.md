@@ -1,6 +1,6 @@
-# Drone Delivery Service
+# Drone Delivery API
 
-Drone Delivery Service is an application to manage the online orders and deliveries to the customers effectively. This service is capable enough to determine the best way to deliver the package which helps the customer and Walmart. This service will also help to determine the NPS value which is determined by customer satisfication.
+Drone Delivery API is an application to manage the online orders and deliveries to the customers effectively. This application is capable enough to determine the best way to deliver the package which helps the customer and Walmart. This will also help to determine the NPS value which is determined by customer satisfication.
 
 Assumptions
 ============
@@ -16,7 +16,7 @@ Assumptions
 - If there is an input file then there are orders, if no orders there will not be any file.
 
 >Enhance/TODO
-- Make this service available as Rest API.
+- Make this available as Rest Service.
 - Add Email Utility to send notifications on the Order Status to Customer and Walmart.
 - Batch process to determine the Undelivered orders and add to the next day list.
 
