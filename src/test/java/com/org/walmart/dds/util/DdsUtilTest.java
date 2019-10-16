@@ -140,4 +140,15 @@ public class DdsUtilTest {
 		assertEquals(Integer.valueOf(33), ddsUtil.calcNPSValue(orderDetailList));
 	}
 
+	@Test
+	public void testCreateFilePath() throws Exception {
+		assertEquals("D:\\Walmart-DDS\\data\\inputData.txt",ddsUtil.createFilePath("D:\\Walmart-DDS\\data", "inputData.txt"));
+	}
+	
+	@Test
+	public void testCreateNullFilePath() throws Exception {
+		assertEquals(null,ddsUtil.createFilePath(null, "inputData.txt"));
+	}
+
+
 }
