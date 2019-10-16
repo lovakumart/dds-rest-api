@@ -129,7 +129,7 @@ public class DdsUtil {
 				String.valueOf(calcDeliveryTimeTaken(order.getOrderTime(), order.getFinalRoundTripTime())));
 
 		_logger.info("Delivery Start Time For Order : "+order.getOrderId()+" is " + scheduledStartTime);
-		_logger.info("Delivery End Time For Order : "+order.getOrderId()+" is " + order.getFinalRoundTripTime());
+		_logger.info("Delivery End Time For Order : "+order.getOrderId()+" is " + order.getActDeliveryEndTime());
 		_logger.info("Drone Warehouse Returned After Order : "+order.getOrderId()+" is " + order.getFinalRoundTripTime());
 		
 		/**
