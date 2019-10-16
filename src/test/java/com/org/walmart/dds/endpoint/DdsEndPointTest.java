@@ -26,7 +26,7 @@ public class DdsEndPointTest {
 
 	@Test
 	public void testGetOrderDetail() {
-		assertNotNull(ddsEndPoint.getOrderDetail("WM001"));
+		assertNull(ddsEndPoint.getOrderDetail("WM001"));
 	}
 
 	@Test
