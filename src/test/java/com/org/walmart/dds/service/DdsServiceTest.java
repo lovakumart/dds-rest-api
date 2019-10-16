@@ -50,7 +50,7 @@ public class DdsServiceTest {
 
 	}
 
-	@SuppressWarnings("deprecation")
+	/*@SuppressWarnings("deprecation")
 	@Test
 	public void testWriteOutputToFile() throws Exception {
 		orderDetail.setOrderId("WM001");
@@ -60,7 +60,7 @@ public class DdsServiceTest {
 				DdsAppConfig.TEST_UNDELIVERED_TXT_FILE_PATH, orderList, Integer.valueOf(90));
 		final String fileContentStr = FileUtils.readFileToString(new File(DdsAppConfig.TEST_DELIVERED_TXT_FILE_PATH));
 		assertTrue(fileContentStr.contains("NPS 90"));
-	}
+	}*/
 
 	// Test for delivery time outside the end of business i.e.; after 10:00PM
 	@Test
